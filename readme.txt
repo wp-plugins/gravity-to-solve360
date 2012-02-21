@@ -10,7 +10,7 @@ Exports data from completed Gravity Forms to a specified Solve360 account.
 
 == Description ==
 
-Exports data from completed <a href="http://www.gravityforms.com/">Gravity Forms</a> to a specified <a href="http://norada.com/">Solve360</a> account. Exports can be set to run automatically during set time periods, e.g. once an hour, between 9 a.m. and 5 p.m. on weekdays.
+Exports data from completed <a href="http://www.gravityforms.com/">Gravity Forms</a> to a specified <a href="http://norada.com/">Solve360</a> account.
 
 == Installation ==
 
