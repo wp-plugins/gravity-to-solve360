@@ -1,7 +1,7 @@
 === Gravity to Solve360 ===
 Contributors: steve.barnett
 Tags: gravity, gravityforms, solve360
-Stable tag: 0.8
+Stable tag: 0.81
 Requires at least: 3.1.3
 Tested up to: 3.3.1
 License: GPLv2 or later
@@ -17,11 +17,13 @@ Also available on GitHub: <a href="https://github.com/SteveBarnett/Gravity-to-So
 
 1. Go to Plugins > Add New, Upload and choose gravity-to-solve360.zip.
 2. Activate the plugin.
-3. Add extra data to your existing Gravity Forms as set out below.
+3. Add extra data to your existing Gravity Forms as set out in the FAQ section.
 4. Go to Tools > Export to Solve360 to send data from Gravity Forms to Solve360.
 
-== Labelling Gravity Forms for export ==
 
+== Frequently Asked Questions ==
+
+= How do I mark fields in Gravity Forms for export to Solve360? =
 
 = General =
 
@@ -41,6 +43,7 @@ Example
 = Solve360 required fields =
 
 The following fields are required:
+
 * businessemail;
 * category;
 * ownership.
@@ -88,6 +91,13 @@ Hidden field example
 
 == Changelog ==
 
+= 0.9 =
+
+* Added FAQ section
+
+= 0.81 =
+
+* Tiny bug fixes - name, found fields.
 
 = 0.8 =
 
