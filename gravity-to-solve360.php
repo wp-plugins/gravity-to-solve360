@@ -1,12 +1,12 @@
 <?php
 /**
  * @package Gravity_to_Solve360
- * @version 0.9
+ * @version 0.96
  */
 /*
 Plugin Name: Gravity to Solve360
 Description: Exports data from completed <a href="http://www.gravityforms.com/">Gravity Forms</a> to a specified <a href="http://norada.com/">Solve360</a> account.
-Version: 0.9
+Version: 0.96
 Author: Steve Barnett
 Author URI: http://naga.co.za
 License: GPLv2 or later
@@ -48,7 +48,8 @@ $accepted_fields = array(
 	'gravity_to_solve360_to',
 	'gravity_to_solve360_from',
 	'gravity_to_solve360_cc',
-	'gravity_to_solve360_bcc'
+	'gravity_to_solve360_bcc',
+	'gravity_to_solve360_cron_frequency'
 );
 
 if(!get_option('gravity_to_solve360_debug_mode')) update_option('gravity_to_solve360_debug_mode', 'true');
@@ -59,10 +60,23 @@ function gts360() {
 	require(ABSPATH . 'wp-content/plugins/gravity-to-solve360/gravity-to-solve360.inc.php');
 }
 
+// Cron - run after any form submission
+
+add_action("gform_after_submission", "gravity_to_solve360_after_submission", 10, 2);
+
+function gravity_to_solve360_after_submission() {
+	wp_schedule_single_event(time(), 'gravity_to_solve360_cron');
+}
+
+add_action('gravity_to_solve360_cron','gravity_to_solve360_send');
+
+function gravity_to_solve360_send() {
+	require(ABSPATH . 'wp-content/plugins/gravity-to-solve360/gravity-to-solve360.inc.php');
+}
+
 function gts360_options() {
 
 global $accepted_fields;
-
 
 // Save data
 
@@ -112,7 +126,7 @@ if($_POST && wp_verify_nonce($_POST['gravity_to_solve360_nonce'],'gravity_to_sol
 		</td>
 		<td>
 			<input type="text" class="regular-text" name="gravity_to_solve360_debug_start_date" id="gravity_to_solve360_debug_start_date" value="<?php echo get_option('gravity_to_solve360_debug_start_date'); ?>" />
-			Current: <?php echo get_option('gravity_to_solve360_last_export_date'); ?>
+			Current Start Date: <?php echo get_option('gravity_to_solve360_last_export_date'); ?>
 		</td>
 	</tr>
 	
@@ -149,6 +163,7 @@ if($_POST && wp_verify_nonce($_POST['gravity_to_solve360_nonce'],'gravity_to_sol
 			<h3>Solve notification details</h3>
 		</td>
 		<td>
+			<p>user@example.com, Another User &lt;anotheruser@example.com&gt;</p>
 		</td>
 	</tr>
 	
@@ -158,7 +173,6 @@ if($_POST && wp_verify_nonce($_POST['gravity_to_solve360_nonce'],'gravity_to_sol
 		</td>
 		<td>
 			<input type="text" class="regular-text" name="gravity_to_solve360_to" id="gravity_to_solve360_to" value="<?php echo get_option('gravity_to_solve360_to'); ?>" />
-			user@example.com, Another User &lt;anotheruser@example.com&gt;
 		</td>
 	</tr>
 	
@@ -186,6 +200,35 @@ if($_POST && wp_verify_nonce($_POST['gravity_to_solve360_nonce'],'gravity_to_sol
 		</td>
 		<td>
 			<input type="text" class="regular-text" name="gravity_to_solve360_bcc" id="gravity_to_solve360_bcc" value="<?php echo get_option('gravity_to_solve360_bcc'); ?>" />		
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+			<h3>Automatic sending to Solve360</h3>
+		</td>
+		<td>
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+			<label for="gravity_to_solve360_cron_frequency">Frequency</label>
+		</td>
+		<td>
+			<select name="gravity_to_solve360_cron_frequency" id="gravity_to_solve360_cron_frequency">
+				<?php
+
+				global $gravity_to_solve360_cron_frequencies;
+
+				foreach ($gravity_to_solve360_cron_frequencies as $frequency_name => $frequency_display)
+				{
+					echo '<option value="' . $frequency_name . '"';
+					if($frequency_name == get_option('gravity_to_solve360_cron_frequency')) echo ' selected="selected" ';
+					echo '>' . $frequency_display . '</option>';
+				}
+				?>
+			</select>		
 		</td>
 	</tr>
 
